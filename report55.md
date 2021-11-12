@@ -1,0 +1,199 @@
+---
+# Front matter
+title: "Отчёт по лабораторной работе"
+subtitle: "Лабораторная работа 5"
+author: "Дзугаева Лилия Владславовна"
+
+# Generic otions
+lang: ru-RU
+
+# Bibliography
+bibliography: bib/cite.bib
+csl: pandoc/csl/gost-r-7-0-5-2008-numeric.csl
+
+# Pdf output format
+toc: true # Table of contents
+toc_depth: 2
+lof: true # List of figures
+lot: true # List of tables
+fontsize: 12pt
+linestretch: 1.5
+papersize: a4
+documentclass: scrreprt
+## I18n
+polyglossia-lang:
+  name: russian
+  options:
+	- spelling=modern
+	- babelshorthands=true
+polyglossia-otherlangs:
+  name: english
+### Fonts
+mainfont: PT Serif
+romanfont: PT Serif
+sansfont: PT Sans
+monofont: PT Mono
+mainfontoptions: Ligatures=TeX
+romanfontoptions: Ligatures=TeX
+sansfontoptions: Ligatures=TeX,Scale=MatchLowercase
+monofontoptions: Scale=MatchLowercase,Scale=0.9
+## Biblatex
+biblatex: true
+biblio-style: "gost-numeric"
+biblatexoptions:
+  - parentracker=true
+  - backend=biber
+  - hyperref=auto
+  - language=auto
+  - autolang=other*
+  - citestyle=gost-numeric
+## Misc options
+indent: true
+header-includes:
+  - \linepenalty=10 # the penalty added to the badness of each line within a paragraph (no associated penalty node) Increasing the value makes tex try to have fewer lines in the paragraph.
+  - \interlinepenalty=0 # value of the penalty (node) added after each line of a paragraph.
+  - \hyphenpenalty=50 # the penalty for line breaking at an automatically inserted hyphen
+  - \exhyphenpenalty=50 # the penalty for line breaking at an explicit hyphen
+  - \binoppenalty=700 # the penalty for breaking a line at a binary operator
+  - \relpenalty=500 # the penalty for breaking a line at a relation
+  - \clubpenalty=150 # extra penalty for breaking after first line of a paragraph
+  - \widowpenalty=150 # extra penalty for breaking before last line of a paragraph
+  - \displaywidowpenalty=50 # extra penalty for breaking before last line before a display math
+  - \brokenpenalty=100 # extra penalty for page breaking after a hyphenated line
+  - \predisplaypenalty=10000 # penalty for breaking before a display
+  - \postdisplaypenalty=0 # penalty for breaking after a display
+  - \floatingpenalty = 20000 # penalty for splitting an insertion (can only be split footnote in standard LaTeX)
+  - \raggedbottom # or \flushbottom
+  - \usepackage  # keep figures where there are in the text
+  - \floatplacement{figure}{H} # keep figures where there are in the text
+---
+
+# Цель работы
+
+Изучение механизмов изменения идентификаторов, применения SetUID и Sticky-битов. Получение практических навыков работы в консоли с дополнительными атрибутами. Рассмотрение работы механизма смены идентификатора процессов пользователей, а также влияние бита Sticky на запись и удаление файлов.
+
+# Выполнение лабораторной работы
+
+1. Вошёл в систему от имени пользователя guest. (рис. 1):
+
+![рис. 1. Вход в систему](image/1.jpg){ #fig:001 width=70% }
+
+2. Создал программу simpleid.c (рис. 2)
+
+![рис. 2. Создание программы](image/2.jpg){ #fig:001 width=70% }
+
+3. Скомпилировал программу и убедился, что файл программы создан: _gcc simpleid.c -o simpleid_ (рис. 3). 
+
+![рис. 3. Компиляция программы](image/3.jpg){ #fig:001 width=70% }
+
+4. Выполнил программу simpleid: _./simpleid_ (рис. 4)
+
+![рис. 4. Выполнение программы](image/4.jpg){ #fig:001 width=70% }
+
+5. Выполнил системную программу id и сравнил полученный результат с данными предыдущего пункта задания: программа работает верно, результаты совпадают. (рис. 5)
+
+![рис. 5. Верность выполнения программы](image/5.jpg){ #fig:001 width=70% }
+
+6. Усложнил программу, добавив вывод действительных идентификаторов: (рис. 6)
+
+![рис. 6. Усложнение программы](image/6.jpg){ #fig:001 width=70% }
+
+Получившуюся программу назвал _simpleid2.c_.
+
+7. Скомпилировал и запустил simpleid2.c. (рис. 7)
+
+![рис. 7. Компиляция второй программы](image/7.jpg){ #fig:001 width=70% }
+
+8. От имени суперпользователя выполнил команды: _chown root:guest /home/guest/simpleid2_ и _chmod u+s /home/guest/simpleid2_ (рис. 8)
+
+![рис. 8. Выполнение команд](image/8.jpg){ #fig:001 width=70% }
+
+9. Временно повысил свои права с помощью команды su (рис. 9)
+
+![рис. 9. Повышение прав](image/9.jpg){ #fig:001 width=70% }
+
+10. Выполнил проверку правильности установки новых атрибутов и смены владельца файла simpleid2: _ls –l simpleid2_ (рис. 10)
+
+![рис. 10. Проверка шагов](image/10.jpg){ #fig:001 width=70% }
+
+11. Запустил simpleid2 и id: (рис. 11)
+
+![рис. 11. Запуск программы](image/11.jpg){ #fig:001 width=70% }
+
+Результаты совпадают.
+
+12. Проделал тоже самое относительно SetGID-бита. (рис. 12)
+
+![рис. 12. Повтор предыдущих шагов](image/12.jpg){ #fig:001 width=70% }
+
+13. Создал программу readfile.c (рис. 13)
+
+![рис. 13. Создание третьей программы](image/13.jpg){ #fig:001 width=70% }
+
+14. Откомпилировал её. (рис. 14)
+
+![рис. 14. Компиляция программы](image/14.jpg){ #fig:001 width=70% }
+
+15. Сменил владельца у файла readfile.c и изменил права так, чтобы только суперпользователь (root) мог прочитать его, a guest не мог. (рис. 15)
+
+![рис. 15. Смена владельца](image/15.jpg){ #fig:001 width=70% }
+
+__Исследование Sticky-бита__
+
+1. Выяснил, установлен ли атрибут Sticky на директории /tmp, для чего выполнил команду _ls -l / | grep tmp_. (рис. 1)
+
+![рис. 1. Проверка атрибута](image/1.1.jpg){ #fig:001 width=70% }
+
+2. От имени пользователя guest создал файл file01.txt в директории /tmp со словом test: _echo "test" > /tmp/file01.txt_. (рис. 2)
+
+![рис. 2. Создание файла](image/1.2.jpg){ #fig:001 width=70% }
+
+3. Просмотрел атрибуты у только что созданного файла и разрешил чтение и запись для категории пользователей «все остальные». Первоначально все группы имели право на чтение, а запись могли осуществлять все, кроме «остальных пользователей». (рис. 3)
+
+![рис. 3. Просмотр атрибутов](image/1.3.jpg){ #fig:001 width=70% }
+
+4. От пользователя guest2 (не являющегося владельцем) попробовал прочитать файл /tmp/file01.txt. (рис. 4)
+
+![рис. 4. Чтение файла](image/1.4.jpg){ #fig:001 width=70% }
+
+5. От пользователя guest2 попробовал дозаписать в файл /tmp/file01.txt слово test2, стерев при этом всю имеющуюся в файле информацию с помощью команды _echo "test2" > /tmp/file01.txt_. (рис. 5)
+
+![рис. 5. Дозапись в файл](image/1.5.jpg){ #fig:001 width=70% }
+
+6. Проверил содержимое файла командой _cat /tmp/file01.txt_ (рис. 6)
+
+![рис. 6. Проверка содержимого](image/1.6.jpg){ #fig:001 width=70% }
+
+7. От пользователя guest2 попробовал дозаписать в файл /tmp/file01.txt слово test3 командой _echo "test3" > /tmp/file01.txt_. (рис. 7)
+
+![рис. 7. Дозапись в файл](image/1.7.jpg){ #fig:001 width=70% }
+
+8. Проверил содержимое файла командой _cat /tmp/file01.txt_. (рис. 8) 
+
+![рис. 8. Проверка содержимого](image/1.8.jpg){ #fig:001 width=70% }
+
+9. От пользователя guest2 попробовал удалить файл /tmp/file01.txt c помощью команды _rm /tmp/file0l.txt_. (рис. 9)
+
+![рис. 9. Удаление файла](image/1.9.jpg){ #fig:001 width=70% }
+
+10. Повысил свои права до суперпользователя командой su - и выполнил после этого команду, снимающую атрибут t (Sticky-бит) с директории /tmp: (рис. 10)
+
+![рис. 10. Выполнение команды](image/1.10.jpg){ #fig:001 width=70% }
+
+11. Покинул режим суперпользователя командой exit. (рис. 11)
+
+![рис. 11. Смена режима](image/1.11.jpg){ #fig:001 width=70% }
+
+12. Повысил свои права до суперпользователя c помощью команды su - и вернул атрибут t на директорию /tmp. (рис. 12)
+
+![рис. 12. Повышение прав](image/1.15.jpg){ #fig:001 width=70% }
+
+
+
+# Выводы
+
+Благодаря данной лабораторной работе, я изучил механизмы изменения идентификаторов, применения SetUID- и Sticky-битов. Получил практические навыки работы в консоли с дополнительными атрибутами. Рассмотрел работу механизма смены идентификатора процессов пользователей, а также влияние бита Sticky на запись и удаление файлов. 
+# Список литературы{.unnumbered}
+
+::: {#refs}
+:::
